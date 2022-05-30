@@ -1,0 +1,11 @@
+{
+  "name": "near-marketplace-contract",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/skiran017/near-marketplace-contract.git",
+  "author": "skiran017 <skiran017@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "near-sdk-as": "^3.2.3"
+  }
+}

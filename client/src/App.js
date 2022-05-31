@@ -1,28 +1,49 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./App.css";
-import { getProducts } from "./utils/marketplace";
-import { login } from "./utils/near";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Nav } from 'react-bootstrap';
+import { login, logout as destroy, accountBalance } from './utils/near';
+import Wallet from './components/Wallet';
+import { Notification } from './components/utils/Notifications';
+import Products from './components/marketplace/Products';
+import Cover from './components/utils/Cover';
+import coverImg from './assets/img/sandwich.jpg';
+import './App.css';
 
-function App() {
+const App = function AppWrapper() {
   const account = window.walletConnection.account();
-  const [products, setProducts] = useState([]);
-  const fetchProducts = useCallback(async () => {
+  const [balance, setBalance] = useState('0');
+  const getBalance = useCallback(async () => {
     if (account.accountId) {
-      setProducts(await getProducts());
+      setBalance(await accountBalance());
     }
   });
+
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    getBalance();
+  }, [getBalance]);
   return (
     <>
+      <Notification />
       {account.accountId ? (
-        products.forEach((product) => console.log(product))
+        <Container fluid="md">
+          <Nav className="justify-content-end pt-3 pb-5">
+            <Nav.Item>
+              <Wallet
+                address={account.accountId}
+                amount={balance}
+                symbol="NEAR"
+                destroy={destroy}
+              />
+            </Nav.Item>
+          </Nav>
+          <main>
+            <Products />
+          </main>
+        </Container>
       ) : (
-        <button onClick={login}>CONNECT WALLET</button>
+        <Cover name="Street Food" login={login} coverImg={coverImg} />
       )}
     </>
   );
-}
+};
 
 export default App;
